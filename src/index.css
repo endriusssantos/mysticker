@@ -19,3 +19,21 @@
   --color-surface-tint: #006e2f;
   --color-on-secondary-container: #5c647a;
 }
+
+body {
+  background-color: var(--color-surface-container);
+  font-family: "Anton", sans-serif;
+}
+
+label {
+  font-family: "Hanken Grotesk", sans-serif;
+}
+
+input {
+  font-family: "Hanken Grotesk", sans-serif;
+  padding-left: 10px;
+}
+
+button {
+  font-family: "Hanken Grotesk", sans-serif;
+}
