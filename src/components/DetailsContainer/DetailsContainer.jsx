@@ -5,7 +5,15 @@ import {
   BsShare,
 } from "react-icons/bs";
 
-const DetailsContainer = () => {
+const DetailsContainer = ({ stickerData, setStickerData }) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setStickerData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
   return (
     <section className="bg-background mx-4 my-8 max-w-3xl rounded-[28px] p-7 shadow-[0px_10px_30px_rgba(15,23,42,0.05)]">
       <div className="mb-8 flex items-center gap-4">
@@ -25,8 +33,11 @@ const DetailsContainer = () => {
             id="name"
             type="text"
             maxLength="20"
-            placeholder="Ex: Pelé Júnior"
+            placeholder="NEYMAR JR"
             className="bg-surface-container text-on-surface border-b-outline-variant focus:border-b-primary-container mt-2 w-full border-b-2 px-4 py-3 text-base transition-all duration-300 ease-out outline-none focus:ring-0"
+            value={stickerData.name}
+            onChange={handleChange}
+            name="name"
           />
         </div>
 
@@ -40,10 +51,12 @@ const DetailsContainer = () => {
             </label>
             <input
               id="year"
-              type="number"
-              min="0"
-              placeholder="2010"
+              type="text"
+              placeholder="05-02-1992"
               className="bg-surface-container text-on-surface border-b-outline-variant focus:border-b-primary-container mt-2 w-full border-b-2 px-4 py-3 text-base transition-all duration-300 ease-out outline-none focus:ring-0"
+              value={stickerData.birthDate}
+              onChange={handleChange}
+              name="birthDate"
             />
           </div>
           <div>
@@ -57,8 +70,11 @@ const DetailsContainer = () => {
               id="team"
               type="text"
               maxLength="20"
-              placeholder="Brasil"
+              placeholder="SANTOS FC (BRA)"
               className="bg-surface-container text-on-surface border-b-outline-variant focus:border-b-primary-container mt-2 w-full border-b-2 px-4 py-3 text-base transition-all duration-300 ease-out outline-none focus:ring-0"
+              value={stickerData.club}
+              onChange={handleChange}
+              name="club"
             />
           </div>
         </div>
@@ -73,10 +89,12 @@ const DetailsContainer = () => {
             </label>
             <input
               id="height"
-              type="number"
-              min="0"
-              placeholder="180"
+              type="text"
+              placeholder="1,75"
               className="bg-surface-container text-on-surface border-b-outline-variant focus:border-b-primary-container mt-2 w-full border-b-2 px-4 py-3 text-base transition-all duration-300 ease-out outline-none focus:ring-0"
+              value={stickerData.height}
+              onChange={handleChange}
+              name="height"
             />
           </div>
           <div>
@@ -88,10 +106,12 @@ const DetailsContainer = () => {
             </label>
             <input
               id="weight"
-              type="number"
-              min="0"
-              placeholder="75"
+              type="text"
+              placeholder="68"
               className="bg-surface-container text-on-surface border-b-outline-variant focus:border-b-primary-container mt-2 w-full border-b-2 px-4 py-3 text-base transition-all duration-300 ease-out outline-none focus:ring-0"
+              value={stickerData.weight}
+              onChange={handleChange}
+              name="weight"
             />
           </div>
         </div>
