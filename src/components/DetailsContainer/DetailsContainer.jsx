@@ -14,6 +14,20 @@ const DetailsContainer = ({ stickerData, setStickerData }) => {
       [name]: value,
     }));
   };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    const imageUrl = URL.createObjectURL(file);
+
+    setStickerData((prev) => ({
+      ...prev,
+      photo: imageUrl,
+    }));
+  };
+
   return (
     <section className="bg-background mx-4 my-8 max-w-3xl rounded-[28px] p-7 shadow-[0px_10px_30px_rgba(15,23,42,0.05)]">
       <div className="mb-8 flex items-center gap-4">
@@ -128,7 +142,12 @@ const DetailsContainer = ({ stickerData, setStickerData }) => {
             <span className="text-secondary group-hover:text-primary text-sm font-semibold transition-colors duration-300">
               Escolher Imagem
             </span>
-            <input type="file" className="hidden" accept="image/*" />
+            <input
+              type="file"
+              className="hidden"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
           </label>
         </div>
       </div>

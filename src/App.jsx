@@ -11,6 +11,7 @@ function App() {
     height: "",
     weight: "",
     club: "",
+    photo: "",
   });
 
   return (

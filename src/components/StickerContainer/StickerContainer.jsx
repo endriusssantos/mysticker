@@ -1,4 +1,5 @@
 import brazilSticker from "../../assets/brazil_sticker.png";
+import neymarPhoto from "../../assets/neymar_photo.png";
 
 const StickerContainer = ({ stickerData }) => {
   return (
@@ -9,6 +10,13 @@ const StickerContainer = ({ stickerData }) => {
           alt="Brazil Sticker"
           className="relative z-0 h-auto w-full object-cover"
         />
+        <div className={stickerData.photo ? "absolute top-[7%] left-1/2 z-10 h-[70%] w-[70%] translate-x-[-65%] overflow-hidden" : "absolute top-[8%] left-1/2 z-10 h-[80%] w-[80%] translate-x-[-52%] overflow-hidden"}>
+          <img
+            src={stickerData.photo || neymarPhoto}
+            alt="User Photo"
+            className={"h-full w-full object-cover"}
+          />
+        </div>
         <span className="absolute right-20 bottom-25 left-0 z-10 text-2xl font-bold uppercase md:text-[29px]">
           {stickerData.name || "NEYMAR JR"}
         </span>
