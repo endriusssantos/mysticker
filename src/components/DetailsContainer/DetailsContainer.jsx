@@ -52,6 +52,7 @@ const DetailsContainer = ({ stickerData, setStickerData }) => {
             <input
               id="year"
               type="text"
+              maxLength="10"
               placeholder="05-02-1992"
               className="bg-surface-container text-on-surface border-b-outline-variant focus:border-b-primary-container mt-2 w-full border-b-2 px-4 py-3 text-base transition-all duration-300 ease-out outline-none focus:ring-0"
               value={stickerData.birthDate}
@@ -90,6 +91,7 @@ const DetailsContainer = ({ stickerData, setStickerData }) => {
             <input
               id="height"
               type="text"
+              maxLength="4"
               placeholder="1,75"
               className="bg-surface-container text-on-surface border-b-outline-variant focus:border-b-primary-container mt-2 w-full border-b-2 px-4 py-3 text-base transition-all duration-300 ease-out outline-none focus:ring-0"
               value={stickerData.height}
@@ -107,6 +109,7 @@ const DetailsContainer = ({ stickerData, setStickerData }) => {
             <input
               id="weight"
               type="text"
+              maxLength="3"
               placeholder="68"
               className="bg-surface-container text-on-surface border-b-outline-variant focus:border-b-primary-container mt-2 w-full border-b-2 px-4 py-3 text-base transition-all duration-300 ease-out outline-none focus:ring-0"
               value={stickerData.weight}
@@ -130,12 +133,12 @@ const DetailsContainer = ({ stickerData, setStickerData }) => {
         </div>
       </div>
 
-      <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-        <button className="bg-primary-container text-primary flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl px-6 py-4 text-sm font-semibold uppercase shadow-[0px_10px_30px_rgba(34,197,94,0.25)] transition duration-300 hover:scale-105 sm:w-auto">
+      <div className="mt-8 flex flex-col gap-3 lg:flex-row">
+        <button className="bg-primary-container text-primary flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl px-6 py-4 text-sm font-semibold uppercase shadow-[0px_10px_30px_rgba(34,197,94,0.25)] transition duration-300 hover:scale-105 lg:flex-1">
           <BsCloudDownload className="text-base" />
           Baixar figurinha
         </button>
-        <button className="border-primary text-primary hover:bg-surface-container flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border-2 px-6 py-4 text-sm font-semibold uppercase transition duration-300 sm:w-auto">
+        <button className="border-primary text-primary hover:bg-surface-container flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border-2 px-6 py-4 text-sm font-semibold uppercase transition duration-300 lg:flex-1">
           <BsShare className="text-base" />
           Compartilhar
         </button>
