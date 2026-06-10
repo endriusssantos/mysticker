@@ -1,5 +1,6 @@
+import brazilSticker from "../../assets/brazil_sticker.png";
+
 const StickerContainer = ({ stickerData }) => {
-  const brazilSticker = "src/assets/brazil_sticker.png";
   return (
     <section className="flex flex-col items-center">
       <div className="relative w-full max-w-md py-10 text-center font-[Oswald] tracking-wide text-white">
