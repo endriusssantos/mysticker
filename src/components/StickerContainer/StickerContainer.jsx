@@ -1,13 +1,14 @@
 const StickerContainer = ({ stickerData }) => {
+  const brazilSticker = "../../assets/brazil_sticker.png";
   return (
     <section className="flex flex-col items-center">
       <div className="relative w-full max-w-md py-10 text-center font-[Oswald] tracking-wide text-white">
         <img
-          src="/src/assets/brazil_sticker.png"
+          src={brazilSticker}
           alt="Brazil Sticker"
           className="relative z-0 h-auto w-full object-cover"
         />
-        <span className="absolute right-20 bottom-25 left-0 z-10 text-2xl md:text-[29px] font-bold uppercase">
+        <span className="absolute right-20 bottom-25 left-0 z-10 text-2xl font-bold uppercase md:text-[29px]">
           {stickerData.name || "NEYMAR JR"}
         </span>
         <span className="absolute right-20 bottom-20 left-0 z-10">
