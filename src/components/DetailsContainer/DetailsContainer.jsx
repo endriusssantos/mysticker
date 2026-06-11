@@ -39,7 +39,6 @@ const DetailsContainer = ({ stickerData, setStickerData, stickerRef }) => {
         height: height,
         pixelRatio: 3,
         cacheBust: true,
-        backgroundColor: "#00000000",
         style: {
           transform: "scale(1)",
           transformOrigin: "top left",
@@ -51,13 +50,12 @@ const DetailsContainer = ({ stickerData, setStickerData, stickerRef }) => {
 
       const link = document.createElement("a");
       link.href = dataUrl;
-      link.download = `${stickerData.name || "figurinha"}.png`;
+      link.download = `${stickerData.name || "Neymar"}.png`;
       link.click();
     } catch (error) {
       console.error("Erro ao gerar o download com fontes:", error);
     }
   };
-
 
   const handleShare = async () => {
     if (!stickerRef.current) return;
@@ -70,7 +68,6 @@ const DetailsContainer = ({ stickerData, setStickerData, stickerRef }) => {
         height: height,
         pixelRatio: 2,
         cacheBust: true,
-        backgroundColor: "#00000000",
         style: {
           transform: "scale(1)",
           transformOrigin: "top left",
@@ -81,7 +78,7 @@ const DetailsContainer = ({ stickerData, setStickerData, stickerRef }) => {
 
       const response = await fetch(dataUrl);
       const blob = await response.blob();
-      const file = new File([blob], `${stickerData.name || "figurinha"}.png`, {
+      const file = new File([blob], `${stickerData.name || "Neymar"}.png`, {
         type: "image/png",
       });
 
@@ -246,6 +243,6 @@ const DetailsContainer = ({ stickerData, setStickerData, stickerRef }) => {
       </div>
     </section>
   );
-};;
+};
 
 export default DetailsContainer;
