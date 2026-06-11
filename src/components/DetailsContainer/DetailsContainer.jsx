@@ -82,42 +82,67 @@ const DetailsContainer = ({ stickerData, setStickerData, stickerRef }) => {
     if (!stickerRef.current) return;
 
     try {
+      const fontResponse = await fetch(oswaldFont);
+      const fontBlob = await fontResponse.blob();
+
+      const fontBase64 = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(fontBlob);
+        reader.onloadend = () => resolve(reader.result);
+      });
+
+      const fontEmbedRules = `
+      @font-face {
+        font-family: 'Oswald';
+        src: url('${fontBase64}') format('truetype');
+        font-weight: bold;
+        font-style: normal;
+      }
+    `;
+
       const width = stickerRef.current.offsetWidth;
       const height = stickerRef.current.offsetHeight;
-      const dataUrl = await toPng(stickerRef.current, {
-        width: width,
-        height: height,
-        pixelRatio: 2,
-        cacheBust: true,
-        style: {
-          transform: "scale(1)",
-          transformOrigin: "top left",
-          width: `${width}px`,
-          height: `${height}px`,
-        },
-      });
 
-      const response = await fetch(dataUrl);
-      const blob = await response.blob();
-      const file = new File([blob], `${stickerData.name || "Neymar"}.png`, {
-        type: "image/png",
-      });
-
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          files: [file],
-          title: "Minha Figurinha do Álbum! ⚽",
-          text: `Olha a figurinha do craque ${stickerData.name || "Neymar"} que eu criei! Ficou braba demais. 🔥\n\nQuer fazer a sua também com a sua foto e dados personalizados? É de graça! Clique no link abaixo e monte o seu sticker agora:`,
-          url: window.location.origin,
+      setTimeout(async () => {
+        const dataUrl = await toPng(stickerRef.current, {
+          width: width,
+          height: height,
+          pixelRatio: 2,
+          cacheBust: true,
+          fontEmbedCSS: fontEmbedRules,
+          style: {
+            transform: "scale(1)",
+            transformOrigin: "top left",
+            width: `${width}px`,
+            height: `${height}px`,
+            fontFamily: "'Oswald', sans-serif",
+          },
         });
-      } else {
-        alert(
-          "Seu navegador não aceita compartilhar imagens direto. Baixe a foto e envie para os amigos! 😉",
+
+        const response = await fetch(dataUrl);
+        const blob = await response.blob();
+        const file = new File(
+          [blob],
+          `${stickerData.name || "figurinha"}.png`,
+          { type: "image/png" },
         );
-      }
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: "Minha Figurinha do Álbum! ⚽",
+            text: `Olha a figurinha do craque ${stickerData.name || "NEYMAR JR"} que eu criei! Ficou braba demais. 🔥\n\nQuer fazer a sua também com a sua foto e dados personalizados? É de graça! Clique no link abaixo e monte o seu sticker agora:`,
+            url: window.location.origin,
+          });
+        } else {
+          alert(
+            "Seu navegador não aceita compartilhar imagens direto. Baixe a foto e envie para os amigos! 😉",
+          );
+        }
+      }, 300);
     } catch (error) {
       if (error.name !== "AbortError") {
-        console.error("Erro ao compartilhar no celular:", error);
+        console.error("Erro ao compartilhar:", error);
       }
     }
   };
