@@ -1,12 +1,12 @@
 import { useRef, useState, useEffect } from "react";
 import DetailsContainer from "./components/DetailsContainer/DetailsContainer";
 import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
 import StickerContainer from "./components/StickerContainer/StickerContainer";
 import MainContainer from "./components/MainContainer/MainContainer";
 import brazilStickerImg from "./assets/images/brazil_sticker.png";
 import neymarPhotoImg from "./assets/images/neymar_photo.png";
 import { getBase64FromUrl } from "./components/ImageUtils/ImageUtils";
-
 
 function App() {
   const stickerRef = useRef(null);
@@ -52,6 +52,7 @@ function App() {
           defaultPhoto={base64Neymar}
         />
       </MainContainer>
+      <Footer />
     </>
   );
 }
