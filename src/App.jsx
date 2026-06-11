@@ -3,8 +3,8 @@ import DetailsContainer from "./components/DetailsContainer/DetailsContainer";
 import Header from "./components/Header/Header";
 import StickerContainer from "./components/StickerContainer/StickerContainer";
 import MainContainer from "./components/MainContainer/MainContainer";
-import brazilStickerImg from "./assets/brazil_sticker.png";
-import neymarPhotoImg from "./assets/neymar_photo.png";
+import brazilStickerImg from "./assets/images/brazil_sticker.png";
+import neymarPhotoImg from "./assets/images/neymar_photo.png";
 import { getBase64FromUrl } from "./components/ImageUtils/ImageUtils";
 
 

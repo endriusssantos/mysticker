@@ -4,8 +4,8 @@ import {
   BsPencilSquare,
   BsShare,
 } from "react-icons/bs";
-
 import { toPng } from "html-to-image";
+import oswaldFont from "../../assets/fonts/Oswald.ttf";
 
 const DetailsContainer = ({ stickerData, setStickerData, stickerRef }) => {
   const handleChange = (e) => {
@@ -31,27 +31,48 @@ const DetailsContainer = ({ stickerData, setStickerData, stickerRef }) => {
     if (!stickerRef.current) return;
 
     try {
-      await document.fonts.ready;
-      const width = stickerRef.current.offsetWidth;
-      const height = stickerRef.current.offsetHeight;
-      const dataUrl = await toPng(stickerRef.current, {
-        width: width,
-        height: height,
-        pixelRatio: 3,
-        cacheBust: true,
-        style: {
-          transform: "scale(1)",
-          transformOrigin: "top left",
-          width: `${width}px`,
-          height: `${height}px`,
-          fontFamily: "'Oswald', 'Hanken Grotesk', sans-serif",
-        },
+      const fontResponse = await fetch(oswaldFont);
+      const fontBlob = await fontResponse.blob();
+
+      const fontBase64 = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(fontBlob);
+        reader.onloadend = () => resolve(reader.result);
       });
 
-      const link = document.createElement("a");
-      link.href = dataUrl;
-      link.download = `${stickerData.name || "Neymar"}.png`;
-      link.click();
+      const fontEmbedRules = `
+      @font-face {
+        font-family: 'Oswald';
+        src: url('${fontBase64}') format('truetype');
+        font-weight: bold;
+        font-style: normal;
+      }
+    `;
+
+      const width = stickerRef.current.offsetWidth;
+      const height = stickerRef.current.offsetHeight;
+
+      setTimeout(async () => {
+        const dataUrl = await toPng(stickerRef.current, {
+          width: width,
+          height: height,
+          pixelRatio: 3,
+          cacheBust: true,
+          fontEmbedCSS: fontEmbedRules,
+          style: {
+            transform: "scale(1)",
+            transformOrigin: "top left",
+            width: `${width}px`,
+            height: `${height}px`,
+            fontFamily: "'Oswald', sans-serif",
+          },
+        });
+
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = `${stickerData.name || "figurinha"}.png`;
+        link.click();
+      }, 300);
     } catch (error) {
       console.error("Erro ao gerar o download com fontes:", error);
     }
