@@ -31,15 +31,20 @@ const DetailsContainer = ({ stickerData, setStickerData, stickerRef }) => {
     if (!stickerRef.current) return;
 
     try {
-      const fontUrl = "https://googleapis.com";
-      const response = await fetch(fontUrl);
-      const fontCssText = await response.text();
-
+      await document.fonts.ready;
+      const width = stickerRef.current.offsetWidth;
+      const height = stickerRef.current.offsetHeight;
       const dataUrl = await toPng(stickerRef.current, {
+        width: width,
+        height: height,
         pixelRatio: 3,
         cacheBust: true,
-        fontEmbedCSS: fontCssText,
+        backgroundColor: "#00000000",
         style: {
+          transform: "scale(1)",
+          transformOrigin: "top left",
+          width: `${width}px`,
+          height: `${height}px`,
           fontFamily: "'Oswald', 'Hanken Grotesk', sans-serif",
         },
       });
@@ -49,26 +54,29 @@ const DetailsContainer = ({ stickerData, setStickerData, stickerRef }) => {
       link.download = `${stickerData.name || "figurinha"}.png`;
       link.click();
     } catch (error) {
-      console.error("Erro ao gerar o download com as fontes:", error);
-
-      toPng(stickerRef.current, { pixelRatio: 3, cacheBust: true }).then(
-        (dataUrl) => {
-          const link = document.createElement("a");
-          link.href = dataUrl;
-          link.download = `${stickerData.name || "figurinha"}.png`;
-          link.click();
-        },
-      );
+      console.error("Erro ao gerar o download com fontes:", error);
     }
   };
+
 
   const handleShare = async () => {
     if (!stickerRef.current) return;
 
     try {
+      const width = stickerRef.current.offsetWidth;
+      const height = stickerRef.current.offsetHeight;
       const dataUrl = await toPng(stickerRef.current, {
+        width: width,
+        height: height,
         pixelRatio: 2,
         cacheBust: true,
+        backgroundColor: "#00000000",
+        style: {
+          transform: "scale(1)",
+          transformOrigin: "top left",
+          width: `${width}px`,
+          height: `${height}px`,
+        },
       });
 
       const response = await fetch(dataUrl);
@@ -81,7 +89,7 @@ const DetailsContainer = ({ stickerData, setStickerData, stickerRef }) => {
         await navigator.share({
           files: [file],
           title: "Minha Figurinha do Álbum! ⚽",
-          text: `Olha a figurinha do craque ${stickerData.name || "NEYMAR JR"} que eu criei! Ficou braba demais. 🔥\n\nQuer fazer a sua também com a sua foto e dados personalizados? É de graça! Clique no link abaixo e monte o seu sticker agora:`,
+          text: `Olha a figurinha do craque ${stickerData.name || "Neymar"} que eu criei! Ficou braba demais. 🔥\n\nQuer fazer a sua também com a sua foto e dados personalizados? É de graça! Clique no link abaixo e monte o seu sticker agora:`,
           url: window.location.origin,
         });
       } else {
@@ -91,7 +99,7 @@ const DetailsContainer = ({ stickerData, setStickerData, stickerRef }) => {
       }
     } catch (error) {
       if (error.name !== "AbortError") {
-        console.error("Erro ao compartilhar:", error);
+        console.error("Erro ao compartilhar no celular:", error);
       }
     }
   };
@@ -238,6 +246,6 @@ const DetailsContainer = ({ stickerData, setStickerData, stickerRef }) => {
       </div>
     </section>
   );
-};
+};;
 
 export default DetailsContainer;

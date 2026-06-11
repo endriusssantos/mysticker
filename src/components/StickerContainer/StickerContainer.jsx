@@ -6,7 +6,7 @@ const StickerContainer = ({ stickerData, stickerRef }) => {
     <section className="flex flex-col items-center">
       <div
         ref={stickerRef}
-        className="relative w-full max-w-md text-center font-[Oswald] tracking-wide text-white"
+        className="relative w-full max-w-md bg-transparent text-center font-[Oswald] tracking-wide text-white"
       >
         <img
           src={brazilSticker}
