@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import DetailsContainer from "./components/DetailsContainer/DetailsContainer";
 import Header from "./components/Header/Header";
 import StickerContainer from "./components/StickerContainer/StickerContainer";
 import MainContainer from "./components/MainContainer/MainContainer";
 
 function App() {
+  const stickerRef = useRef(null);
+
   const [stickerData, setStickerData] = useState({
     name: "",
     birthDate: "",
@@ -21,8 +23,9 @@ function App() {
         <DetailsContainer
           stickerData={stickerData}
           setStickerData={setStickerData}
+          stickerRef={stickerRef}
         />
-        <StickerContainer stickerData={stickerData} />
+        <StickerContainer stickerData={stickerData} stickerRef={stickerRef} />
       </MainContainer>
     </>
   );

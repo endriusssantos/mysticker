@@ -5,27 +5,61 @@ import {
   BsShare,
 } from "react-icons/bs";
 
-const DetailsContainer = ({ stickerData, setStickerData }) => {
+import { toPng } from "html-to-image";
+
+const DetailsContainer = ({ stickerData, setStickerData, stickerRef }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    setStickerData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setStickerData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-
     if (!file) return;
 
-    const imageUrl = URL.createObjectURL(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setStickerData((prev) => ({
+        ...prev,
+        photo: reader.result,
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
 
-    setStickerData((prev) => ({
-      ...prev,
-      photo: imageUrl,
-    }));
+  const handleDownload = async () => {
+    if (!stickerRef.current) return;
+
+    try {
+      const fontUrl = "https://googleapis.com";
+      const response = await fetch(fontUrl);
+      const fontCssText = await response.text();
+
+      const dataUrl = await toPng(stickerRef.current, {
+        pixelRatio: 3,
+        cacheBust: true,
+        fontEmbedCSS: fontCssText,
+        style: {
+          fontFamily: "'Oswald', 'Hanken Grotesk', sans-serif",
+        },
+      });
+
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = `${stickerData.name || "figurinha"}.png`;
+      link.click();
+    } catch (error) {
+      console.error("Erro ao gerar o download com as fontes:", error);
+
+      toPng(stickerRef.current, { pixelRatio: 3, cacheBust: true }).then(
+        (dataUrl) => {
+          const link = document.createElement("a");
+          link.href = dataUrl;
+          link.download = `${stickerData.name || "figurinha"}.png`;
+          link.click();
+        },
+      );
+    }
   };
 
   return (
@@ -135,12 +169,14 @@ const DetailsContainer = ({ stickerData, setStickerData }) => {
 
         <div>
           <label className="text-secondary text-sm font-medium uppercase">
-            Foto do jogador
+            {" "}
+            Foto do jogador{" "}
           </label>
           <label className="group border-outline-variant bg-surface-container hover:bg-on-primary-container/10 hover:border-primary/80 mt-3 flex min-h-45 cursor-pointer flex-col items-center justify-center gap-2 rounded-3xl border-2 border-dashed p-6 text-center transition">
             <BsCamera className="text-secondary group-hover:text-primary text-2xl transition-colors duration-300" />
             <span className="text-secondary group-hover:text-primary text-sm font-semibold transition-colors duration-300">
-              Escolher Imagem
+              {" "}
+              Escolher Imagem{" "}
             </span>
             <input
               type="file"
@@ -153,13 +189,14 @@ const DetailsContainer = ({ stickerData, setStickerData }) => {
       </div>
 
       <div className="mt-8 flex flex-col gap-3 lg:flex-row">
-        <button className="bg-primary-container text-primary flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl px-6 py-4 text-sm font-semibold uppercase shadow-[0px_10px_30px_rgba(34,197,94,0.25)] transition duration-300 hover:scale-105 lg:flex-1">
-          <BsCloudDownload className="text-base" />
-          Baixar figurinha
+        <button
+          onClick={handleDownload}
+          className="bg-primary-container text-primary flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl px-6 py-4 text-sm font-semibold uppercase shadow-[0px_10px_30px_rgba(34,197,94,0.25)] transition duration-300 hover:scale-105 lg:flex-1"
+        >
+          <BsCloudDownload className="text-base" /> Baixar figurinha
         </button>
         <button className="border-primary text-primary hover:bg-surface-container flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border-2 px-6 py-4 text-sm font-semibold uppercase transition duration-300 lg:flex-1">
-          <BsShare className="text-base" />
-          Compartilhar
+          <BsShare className="text-base" /> Compartilhar
         </button>
       </div>
     </section>
