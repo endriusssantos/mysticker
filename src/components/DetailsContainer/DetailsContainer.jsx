@@ -62,6 +62,40 @@ const DetailsContainer = ({ stickerData, setStickerData, stickerRef }) => {
     }
   };
 
+  const handleShare = async () => {
+    if (!stickerRef.current) return;
+
+    try {
+      const dataUrl = await toPng(stickerRef.current, {
+        pixelRatio: 2,
+        cacheBust: true,
+      });
+
+      const response = await fetch(dataUrl);
+      const blob = await response.blob();
+      const file = new File([blob], `${stickerData.name || "figurinha"}.png`, {
+        type: "image/png",
+      });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: "Minha Figurinha do Álbum! ⚽",
+          text: `Olha a figurinha do craque ${stickerData.name || "NEYMAR JR"} que eu criei! Ficou braba demais. 🔥\n\nQuer fazer a sua também com a sua foto e dados personalizados? É de graça! Clique no link abaixo e monte o seu sticker agora:`,
+          url: window.location.origin,
+        });
+      } else {
+        alert(
+          "Seu navegador não aceita compartilhar imagens direto. Baixe a foto e envie para os amigos! 😉",
+        );
+      }
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        console.error("Erro ao compartilhar:", error);
+      }
+    }
+  };
+
   return (
     <section className="bg-background mx-4 my-8 max-w-3xl rounded-[28px] p-7 shadow-[0px_10px_30px_rgba(15,23,42,0.05)]">
       <div className="mb-8 flex items-center gap-4">
@@ -195,7 +229,10 @@ const DetailsContainer = ({ stickerData, setStickerData, stickerRef }) => {
         >
           <BsCloudDownload className="text-base" /> Baixar figurinha
         </button>
-        <button className="border-primary text-primary hover:bg-surface-container flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border-2 px-6 py-4 text-sm font-semibold uppercase transition duration-300 lg:flex-1">
+        <button
+          onClick={handleShare}
+          className="border-primary text-primary hover:bg-surface-container flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border-2 px-6 py-4 text-sm font-semibold uppercase transition duration-300 lg:flex-1"
+        >
           <BsShare className="text-base" /> Compartilhar
         </button>
       </div>
