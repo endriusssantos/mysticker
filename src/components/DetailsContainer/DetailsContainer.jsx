@@ -7,10 +7,21 @@ import {
 import { toPng } from "html-to-image";
 import oswaldFont from "../../assets/fonts/Oswald.ttf";
 
-const DetailsContainer = ({ stickerData, setStickerData, stickerRef }) => {
+const DetailsContainer = ({
+  stickerData,
+  setStickerData,
+  stickerOptions,
+  selectedSticker,
+  setSelectedSticker,
+  stickerRef,
+}) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setStickerData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleStickerSelection = (e) => {
+    setSelectedSticker(e.target.value);
   };
 
   const handleImageChange = (e) => {
@@ -250,6 +261,27 @@ const DetailsContainer = ({ stickerData, setStickerData, stickerRef }) => {
               name="weight"
             />
           </div>
+        </div>
+
+        <div>
+          <label
+            htmlFor="stickerSelection"
+            className="text-secondary text-sm font-medium uppercase"
+          >
+            Seleção do sticker
+          </label>
+          <select
+            id="stickerSelection"
+            value={selectedSticker}
+            onChange={handleStickerSelection}
+            className="bg-surface-container text-on-surface border-b-outline-variant focus:border-b-primary-container mt-2 w-full border-b-2 px-4 py-3 text-base transition-all duration-300 ease-out outline-none focus:ring-0"
+          >
+            {stickerOptions.map((option) => (
+              <option key={option.value} value={option.src}>
+                {option.label}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div>

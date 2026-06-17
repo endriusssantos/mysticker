@@ -26,6 +26,10 @@ input {
   padding-left: 10px;
 }
 
+select {
+  font-family: "Hanken Grotesk", sans-serif;
+}
+
 button {
   font-family: "Hanken Grotesk", sans-serif;
 }
