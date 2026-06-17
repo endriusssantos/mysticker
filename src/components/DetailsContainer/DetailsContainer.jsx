@@ -274,7 +274,7 @@ const DetailsContainer = ({
             id="stickerSelection"
             value={selectedSticker}
             onChange={handleStickerSelection}
-            className="bg-surface-container text-on-surface border-b-outline-variant focus:border-b-primary-container mt-2 w-full border-b-2 px-4 py-3 text-base transition-all duration-300 ease-out outline-none focus:ring-0"
+            className="bg-surface-container text-on-surface border-b-outline-variant focus:border-b-primary-container mt-2 w-full border-b-2 px-2 py-3 text-base transition-all duration-300 ease-out outline-none focus:ring-0"
           >
             {stickerOptions.map((option) => (
               <option key={option.value} value={option.src}>
