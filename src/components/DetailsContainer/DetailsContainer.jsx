@@ -79,7 +79,9 @@ const DetailsContainer = ({
     } catch (error) {
       console.error("Erro ao remover o fundo da imagem:", error);
       setProcessingError(
-        error instanceof Error ? error.message : "Erro inesperado ao processar a imagem.",
+        error instanceof Error
+          ? error.message
+          : "Erro inesperado ao processar a imagem.",
       );
     } finally {
       setIsProcessingImage(false);
@@ -379,7 +381,7 @@ const DetailsContainer = ({
               Escolher Imagem{" "}
             </span>
             {isProcessingImage ? (
-              <div className="mt-2 flex items-center gap-2 text-sm font-semibold text-primary">
+              <div className="text-primary mt-2 flex items-center gap-2 text-sm font-semibold">
                 <FaSpinner className="animate-spin" />
                 Removendo fundo da imagem...
               </div>
@@ -392,7 +394,9 @@ const DetailsContainer = ({
             />
           </label>
           {processingError ? (
-            <p className="mt-3 text-sm font-medium text-red-600">{processingError}</p>
+            <p className="mt-3 text-sm font-medium text-red-600">
+              {processingError}
+            </p>
           ) : null}
         </div>
       </div>

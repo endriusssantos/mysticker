@@ -36,7 +36,11 @@ export default async function handler(req) {
     }
 
     const removeBgFormData = new FormData();
-    removeBgFormData.append("image_file", imageFile, imageFile.name || "image.png");
+    removeBgFormData.append(
+      "image_file",
+      imageFile,
+      imageFile.name || "image.png",
+    );
     removeBgFormData.append("size", "regular");
 
     const response = await fetch("https://api.remove.bg/v1.0/removebg", {
