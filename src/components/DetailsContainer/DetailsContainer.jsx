@@ -61,7 +61,8 @@ const DetailsContainer = ({
 
         try {
           const errorPayload = await response.json();
-          errorMessage = errorPayload?.error || errorPayload?.details || errorMessage;
+          errorMessage =
+            errorPayload?.error || errorPayload?.details || errorMessage;
         } catch {
           errorMessage = `Falha na remoção do fundo (${response.status}).`;
         }
