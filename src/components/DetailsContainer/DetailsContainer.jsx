@@ -5,7 +5,6 @@ import {
   BsPencilSquare,
   BsShare,
 } from "react-icons/bs";
-import { FaSpinner } from "react-icons/fa";
 import { toPng } from "html-to-image";
 import oswaldFont from "../../assets/fonts/Oswald.ttf";
 import CropModal from "../CropModal/CropModal";
@@ -24,8 +23,6 @@ const DetailsContainer = ({
   const [isCropModalOpen, setIsCropModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-  const [isProcessingImage, setIsProcessingImage] = useState(false);
-  const [processingError, setProcessingError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,74 +33,20 @@ const DetailsContainer = ({
     setSelectedSticker(e.target.value);
   };
 
-  const handleImageChange = async (e) => {
+  const handleImageChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setIsProcessingImage(true);
-    setProcessingError("");
-
-    const controller = new AbortController();
-    const timeoutId = window.setTimeout(() => controller.abort(), 45000);
-
-    try {
-      const formData = new FormData();
-      formData.append("image_file", file);
-
-      const response = await fetch("/api/remove-background", {
-        method: "POST",
-        body: formData,
-        signal: controller.signal,
-      });
-
-      if (!response.ok) {
-        let errorMessage = "Não foi possível remover o fundo da imagem.";
-
-        try {
-          const errorPayload = await response.json();
-          errorMessage =
-            errorPayload?.error || errorPayload?.details || errorMessage;
-        } catch {
-          errorMessage = `Falha na remoção do fundo (${response.status}).`;
-        }
-
-        throw new Error(errorMessage);
-      }
-
-      const imageBlob = await response.blob();
-      const imageDataUrl = await new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(imageBlob);
-      });
-
-      setSelectedImage(imageDataUrl);
-      setStickerData((prev) => ({
-        ...prev,
-        photo: imageDataUrl,
-      }));
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setSelectedImage(reader.result);
       setCroppedAreaPixels(null);
       setCrop({ x: 0, y: 0 });
       setZoom(1);
       setIsCropModalOpen(true);
-    } catch (error) {
-      console.error("Erro ao remover o fundo da imagem:", error);
-
-      if (error instanceof Error && error.name === "AbortError") {
-        setProcessingError("O processamento demorou demais. Tente novamente.");
-      } else {
-        setProcessingError(
-          error instanceof Error
-            ? error.message
-            : "Erro inesperado ao processar a imagem.",
-        );
-      }
-    } finally {
-      window.clearTimeout(timeoutId);
-      setIsProcessingImage(false);
-      e.target.value = "";
-    }
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
   };
 
   const handleCropComplete = (_, croppedAreaPixelsValue) => {
@@ -397,12 +340,6 @@ const DetailsContainer = ({
               {" "}
               Escolher Imagem{" "}
             </span>
-            {isProcessingImage ? (
-              <div className="text-primary mt-2 flex items-center gap-2 text-sm font-semibold">
-                <FaSpinner className="animate-spin" />
-                Removendo fundo da imagem...
-              </div>
-            ) : null}
             <input
               type="file"
               className="hidden"
@@ -410,11 +347,6 @@ const DetailsContainer = ({
               onChange={handleImageChange}
             />
           </label>
-          {processingError ? (
-            <p className="mt-3 text-sm font-medium text-red-600">
-              {processingError}
-            </p>
-          ) : null}
         </div>
       </div>
 

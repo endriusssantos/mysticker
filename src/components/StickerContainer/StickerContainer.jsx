@@ -47,8 +47,8 @@ const StickerContainer = ({
         </span>
       </div>
 
-      <span className="text-secondary py-5 text-center font-[Hanken_Grotesk]">
-        Dica: Use fotos com fundo neutro para um resultado profissional!
+      <span className="text-secondary py-4 text-center font-[Hanken_Grotesk]">
+        Dica: Para remoção do fundo da imagem use o site <a href="https://www.remove.bg/" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">remove.bg</a>
       </span>
     </section>
   );
