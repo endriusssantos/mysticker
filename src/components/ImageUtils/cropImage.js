@@ -23,6 +23,7 @@ export const cropImage = async (imageSrc, crop) => {
 
   ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
   ctx.imageSmoothingQuality = "high";
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   ctx.drawImage(
     image,
@@ -36,5 +37,5 @@ export const cropImage = async (imageSrc, crop) => {
     crop.height * scaleY,
   );
 
-  return canvas.toDataURL("image/jpeg", 0.95);
+  return canvas.toDataURL("image/png");
 };
