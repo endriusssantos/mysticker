@@ -43,6 +43,9 @@ const DetailsContainer = ({
     setIsProcessingImage(true);
     setProcessingError("");
 
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 45000);
+
     try {
       const formData = new FormData();
       formData.append("image_file", file);
@@ -50,13 +53,20 @@ const DetailsContainer = ({
       const response = await fetch("/api/remove-background", {
         method: "POST",
         body: formData,
+        signal: controller.signal,
       });
 
       if (!response.ok) {
-        const errorPayload = await response.json().catch(() => null);
-        throw new Error(
-          errorPayload?.error || "Não foi possível remover o fundo da imagem.",
-        );
+        let errorMessage = "Não foi possível remover o fundo da imagem.";
+
+        try {
+          const errorPayload = await response.json();
+          errorMessage = errorPayload?.error || errorPayload?.details || errorMessage;
+        } catch {
+          errorMessage = `Falha na remoção do fundo (${response.status}).`;
+        }
+
+        throw new Error(errorMessage);
       }
 
       const imageBlob = await response.blob();
@@ -78,12 +88,18 @@ const DetailsContainer = ({
       setIsCropModalOpen(true);
     } catch (error) {
       console.error("Erro ao remover o fundo da imagem:", error);
-      setProcessingError(
-        error instanceof Error
-          ? error.message
-          : "Erro inesperado ao processar a imagem.",
-      );
+
+      if (error instanceof Error && error.name === "AbortError") {
+        setProcessingError("O processamento demorou demais. Tente novamente.");
+      } else {
+        setProcessingError(
+          error instanceof Error
+            ? error.message
+            : "Erro inesperado ao processar a imagem.",
+        );
+      }
     } finally {
+      window.clearTimeout(timeoutId);
       setIsProcessingImage(false);
       e.target.value = "";
     }
