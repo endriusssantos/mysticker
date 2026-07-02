@@ -1,3 +1,52 @@
+import { Readable } from "stream";
+import busboy from "busboy";
+
+async function parseMultipartForm(req) {
+  return new Promise((resolve, reject) => {
+    const bb = busboy({ headers: req.headers });
+    const fields = {};
+
+    bb.on("file", (fieldname, file, info) => {
+      const chunks = [];
+
+      file.on("data", (data) => {
+        chunks.push(data);
+      });
+
+      file.on("end", () => {
+        fields[fieldname] = {
+          buffer: Buffer.concat(chunks),
+          filename: info.filename,
+          encoding: info.encoding,
+          mimetype: info.mimeType,
+        };
+      });
+
+      file.on("error", (err) => {
+        reject(err);
+      });
+    });
+
+    bb.on("close", () => {
+      resolve(fields);
+    });
+
+    bb.on("error", (err) => {
+      reject(err);
+    });
+
+    if (req.body instanceof Buffer) {
+      bb.write(req.body);
+      bb.end();
+    } else if (typeof req.body === "string") {
+      bb.write(Buffer.from(req.body));
+      bb.end();
+    } else {
+      req.pipe(bb);
+    }
+  });
+}
+
 export default async function handler(req) {
   if (req.method !== "POST") {
     return new Response(JSON.stringify({ error: "Method not allowed" }), {
@@ -19,23 +68,25 @@ export default async function handler(req) {
   }
 
   try {
-    const formData = await req.formData();
-    const imageFile = formData.get("image_file");
+    // Parse multipart form data
+    const fields = await parseMultipartForm(req);
 
-    if (!imageFile || typeof imageFile === "string") {
+    if (!fields.image_file) {
       return new Response(JSON.stringify({ error: "No image file provided" }), {
         status: 400,
         headers: { "Content-Type": "application/json" },
       });
     }
 
-    const removeBgFormData = new FormData();
-    removeBgFormData.append(
-      "image_file",
-      imageFile,
-      imageFile.name || "image.png",
-    );
-    removeBgFormData.append("size", "regular");
+    const imageData = fields.image_file;
+    const formData = new FormData();
+
+    const imageBlob = new Blob([imageData.buffer], {
+      type: imageData.mimetype || "image/jpeg",
+    });
+
+    formData.append("image_file", imageBlob, imageData.filename || "image.png");
+    formData.append("size", "regular");
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 60000);
@@ -45,7 +96,7 @@ export default async function handler(req) {
       headers: {
         "X-Api-Key": apiKey,
       },
-      body: removeBgFormData,
+      body: formData,
       signal: controller.signal,
     });
 
@@ -67,7 +118,9 @@ export default async function handler(req) {
       );
     }
 
-    return new Response(response.body, {
+    const buffer = await response.arrayBuffer();
+
+    return new Response(buffer, {
       status: 200,
       headers: {
         "Content-Type": response.headers.get("content-type") || "image/png",
