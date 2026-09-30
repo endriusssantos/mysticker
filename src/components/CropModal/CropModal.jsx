@@ -18,13 +18,13 @@ const CropModal = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4">
-      <div className="w-full max-w-3xl rounded-[28px] bg-white p-5 shadow-2xl sm:p-6">
+      <div className="bg-background w-full max-w-3xl rounded-[28px] p-5 shadow-2xl sm:p-6">
         <div className="mb-4 flex items-start justify-between gap-3">
           <div>
-            <h3 className="text-xl font-semibold text-slate-900 uppercase">
+            <h3 className="text-on-surface text-xl font-semibold uppercase">
               Ajustar foto
             </h3>
-            <p className="mt-1 text-sm text-slate-600">
+            <p className="text-secondary mt-1 text-sm">
               Mova a imagem e ajuste o zoom para encaixar na figurinha.
             </p>
           </div>
@@ -45,7 +45,7 @@ const CropModal = ({
         </div>
 
         <div className="mt-5">
-          <label className="mb-2 block text-sm font-semibold text-slate-700 uppercase">
+          <label className="text-secondary mb-2 block text-sm font-semibold uppercase">
             Zoom
           </label>
           <input
@@ -55,7 +55,7 @@ const CropModal = ({
             step="0.1"
             value={zoom}
             onChange={(event) => onZoomChange(Number(event.target.value))}
-            className="h-2 w-full cursor-pointer appearance-none rounded-full bg-slate-200 accent-emerald-600"
+            className="bg-surface-container accent-primary h-2 w-full cursor-pointer appearance-none rounded-full"
           />
         </div>
 
@@ -63,14 +63,14 @@ const CropModal = ({
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 uppercase transition hover:bg-slate-100"
+            className="border-outline-variant text-on-surface hover:bg-surface-container rounded-xl border px-5 py-3 text-sm font-semibold uppercase transition"
           >
             Cancelar
           </button>
           <button
             type="button"
             onClick={onApply}
-            className="rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white uppercase shadow-[0px_10px_30px_rgba(34,197,94,0.25)] transition hover:bg-emerald-700"
+            className="bg-primary-container text-on-primary-container rounded-xl px-5 py-3 text-sm font-semibold uppercase shadow-[0px_10px_30px_rgba(34,197,94,0.25)] transition hover:brightness-95"
           >
             Aplicar
           </button>

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ThemeContext } from "../contexts/ThemeContext";
+import { ThemeContext } from "../contexts/ThemeContextValue";
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);
@@ -9,4 +9,6 @@ export const useTheme = () => {
       "Ops, parece que você esqueceu de envolver o provider no app",
     );
   }
+
+  return context;
 };
